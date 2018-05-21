@@ -1,5 +1,9 @@
 'use strict';
-var app = app || {};
+var app = app || { module };
+
+var article = {};
+
+(function(module){
 
 function Article(rawDataObj) {
   // REVIEW: In Lab 8, we explored a lot of new functionality going on here. Let's re-examine the concept of context. 
@@ -32,14 +36,14 @@ Article.loadAll = articleData => {
   /* OLD forEach():
   articleData.forEach(articleObject => Article.all.push(new Article(articleObject)));
   */
- Article.all = rawData.map(articleObject => new Article(articleObject));
+ Article.all = articleData.map( articleObject => ( new Article( articleObject ) ) );
 };
 
 Article.fetchAll = callback => {
   $.get('/articles')
     .then(results => {
       Article.loadAll(results);
-      callback();
+      callback(articleData);
     })
 };
 
@@ -108,3 +112,4 @@ Article.prototype.updateRecord = function(callback) {
     .then(console.log)
     .then(callback);
 };
+}) (app)
